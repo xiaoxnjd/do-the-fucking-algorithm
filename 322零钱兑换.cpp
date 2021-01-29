@@ -32,6 +32,7 @@
 
 #include <vector>
 #include <iostream>
+#include <limits.h>
 
 using namespace std;
  
@@ -52,48 +53,96 @@ class Solution{
         return -1;
     }
 public:
+	vector<int>coinRecord;
     int coinChange(vector<int>& coins, int amount) {
         return coinChange(0, coins, amount);
     }
+	int coinChange2(vector<int>& coins, int amount) 
+	{
+		int minCost = INT_MAX;
+		int res = 0;
+		if(amount<0)
+		{
+			return -1;
+		}
+		else if(amount == 0)
+		{
+			return 0;
+		}
+		else
+		{
+			for (int i = 0; i < coins.size(); i++)
+			{
+				//cout << "coins["<< i<<"]=" << coins[i] << " amount="<< amount << endl;
+				if((amount>= coins[i])&&(coinRecord[amount - coins[i]]!=0))
+				{
+					res = coinRecord[amount - coins[i]]+1;
+					//cout << "res1="<< res<<" "<<amount<<" "<<coins[i]<< endl;
+				}
+				else
+				{
+					res = coinChange2(coins, amount - coins[i]) + 1;
+					//cout << "res2="<< res << endl;
+				}
+				if(res>0)
+				{
+					minCost = min(res,minCost);
+				}
+				//cout << "minCost="<< minCost << endl;
+			}	
+			if(minCost!=INT_MAX)
+			{
+				coinRecord[amount] = minCost;
+				//cout << "coinRecord["<< amount<<"]=" << coinRecord[amount] << endl;
+				return minCost;
+			}
+			else
+			{
+				return -1;
+			}
+			
+		}
+    }
+	int coinChange3(vector<int>& coins, int amount) {
+		coinRecord.resize(amount+1);
+        return coinChange2(coins, amount);
+    }
+	int coinChange4(vector<int>& coins, int amount) 
+	{
+		vector<int> min_cnt(amount + 1, amount + 1);
+		if(amount < 0) return -1;
+		if(amount == 0) return 0;
+		if(amount > 0) 
+		{
+			for(auto i=0;i<min_cnt.size();i++)
+			{
+				if(i == 0) 
+				{
+					min_cnt[i] = 0;
+					//printf("min_cnt1[%d]:%d\n",i,min_cnt[i]);
+					continue;
+				}
+				for(auto j=0;j<coins.size();j++)
+				{
+					if(i>=coins[j])
+					{
+						min_cnt[i] = min(min_cnt[i],min_cnt[i-coins[j]]+1);
+					}
+				}
+				//printf("min_cnt2[%d]:%d\n",i,min_cnt[i]);
+			}
+		}
+		return min_cnt[amount];
+	}
 };
 
  
 int main(void)
 {
-    vector<int> characters;
- 
-//   characters.assign(7, 'a');
-	characters.push_back(1);
-	characters.push_back(1);
-	characters.push_back(1);
-	characters.push_back(1);
-	characters.push_back(1);
-	
-	cout << ".size() = " << characters.size() << endl;
-	cout << ".capacity() = " << characters.capacity() << endl;
-	cout << ".max_size() = " << characters.max_size() << endl;
-	
-	
- 
-#if 0
-    for (auto c : characters) {
-        cout << c << ' ';
-    } 
- 
-    characters.assign({'\n', 'C', '+', '+', '1', '1', '\n'});
- 
-    for (auto c : characters) {
-        std::cout << c;
-    }
-	
-	cout << "characters[3] = " << characters[3] << endl;
-	
-	cout << "data1 = " << static_cast<void *> (characters.data()) << endl;
-	
-	// 中间可以有很多代码
-	characters.resize(50);
-	cout << "data2 = " << static_cast<void *> (characters.data()) << endl;
-#endif
-	system("pause");
+    vector<int> coins = {5,3,1};
+	Solution test;
+	cout << "coinCnt = " << test.coinChange(coins,143) << endl;
+	cout << "coinCnt2 = " << test.coinChange3(coins,143) << endl;
+	cout << "coinCnt3 = " << test.coinChange4(coins,143) << endl;
 	return 0;
 }
