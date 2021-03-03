@@ -47,9 +47,9 @@ public:
 		for(char c : t)needs[c]++;
 		while(right<s.size()){
 			cout<< "right:" << right <<" "<< s.size() << endl;
-			window[s[right]]++;
 			//cout << window[s[right]] <<" "<< needs[s[right]] << endl;
 			if(needs.count(s[right])){
+				window[s[right]]++;
 				if(window[s[right]] == needs[s[right]]){
 					match++;
 					cout<< "match:" << match << endl;
