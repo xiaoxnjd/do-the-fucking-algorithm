@@ -32,3 +32,66 @@ numbers 按 递增顺序 排列
 链接：https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 */
+#include <vector>
+#include <iostream>
+using namespace std;
+class Solution {
+public:
+/* 还可以优化的，我自己想多了，直接重两头开始往中间缩，*/
+    vector<int> twoSum(vector<int>& numbers, int target) {
+		vector<int> ret;
+		int i=0,j=0;
+		while(++j){
+			cout<<"["<<i<<"]:"<<numbers[i]<<" ["<<j<<"]:"<<numbers[j]<<endl;
+			if(numbers[i]+numbers[j]<target){
+				if((j+1 == numbers.size())||(numbers[i]+numbers[j+1]>target)){
+					while(++i){
+						if(i>=j){
+							return(ret);
+						}
+						else if(numbers[i]+numbers[j] == target){
+							ret.emplace_back(i+1);
+							ret.emplace_back(j+1);
+							return(ret);
+						}
+						else{
+							while(numbers[i]+numbers[j] > target){
+								j--;
+								if(numbers[i]+numbers[j] == target){
+								ret.emplace_back(i+1);
+								ret.emplace_back(j+1);
+								return(ret);
+								}
+							}
+						}
+						
+					}
+				}
+				else if(numbers[i]+numbers[j+1]==target){
+					ret.emplace_back(i+1);
+					ret.emplace_back(j+2);
+					return(ret);
+				}
+			}
+			else if(numbers[i]+numbers[j]>target){
+				return(ret);
+			}
+			else{
+				ret.emplace_back(i+1);
+				ret.emplace_back(j+1);
+				return(ret);
+			}
+		}
+		return(ret);
+    }
+};
+int main(void)
+{
+    vector<int> numbers = {12,13,23,28,43,44,59,60,61,68,70,86,88,92,124,125,136,168,173,173,180,199,212,221,227,230,277,282,306,314,316,321,325,328,336,337,363,365,368,370,370,371,375,384,387,394,400,404,414,422,422,427,430,435,457,493,506,527,531,538,541,546,568,583,585,587,650,652,677,691,730,737,740,751,755,764,778,783,785,789,794,803,809,815,847,858,863,863,874,887,896,916,920,926,927,930,933,957,981,997};
+	vector<int> sum;
+	Solution test;
+	sum = test.twoSum(numbers,542);
+	for (const auto &i : sum) cout << i << " ";
+	cout<<endl;
+	return 0;
+}
