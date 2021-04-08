@@ -37,7 +37,7 @@ numbers 按 递增顺序 排列
 using namespace std;
 class Solution {
 public:
-/* 还可以优化的，我自己想多了，直接重两头开始往中间缩，*/
+/* 还可以优化的，我自己想多了，直接从两头开始往中间缩，不需要从左往右*/
     vector<int> twoSum(vector<int>& numbers, int target) {
 		vector<int> ret;
 		int i=0,j=0;
